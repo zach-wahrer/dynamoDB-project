@@ -14,7 +14,7 @@
 
     qls-137408-c11c1a21378cefb1-s3bucket-1po51sid5ipg4
 
-    Keeo the quotes in there below, and literally just 
+    Keeo the quotes in there below, and literally just
     replace the characters <FMI>
 
 * Copyright 2010-2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -32,14 +32,14 @@
 
 
 */
-var 
+var
     AWS = require("aws-sdk"),
     S3API = new AWS.S3({
         apiVersion: "2006-03-01",
         region: "us-east-1"
     }),
     FS = require("fs"),
-    bucket_name_str = "<FMI>";
+    bucket_name_str = "dynamodb-project-dragon-website";
 
 
 function uploadItemAsBinary(key_name_str, content_type_str, bin){
@@ -73,7 +73,7 @@ function uploadItemAsBinary(key_name_str, content_type_str, bin){
 
     var main_css_bin = FS.readFileSync("website/main.css");
     uploadItemAsBinary("main.css", "text/css", main_css_bin);
-        
+
     var main_js_bin = FS.readFileSync("website/main.js");
     uploadItemAsBinary("main.js", "application/javascript", main_js_bin);
 
@@ -139,7 +139,7 @@ function uploadItemAsBinary(key_name_str, content_type_str, bin){
 
     var Dexler_bin = FS.readFileSync("website/images/Dexler.png");
     uploadItemAsBinary("Dexler.png", "image/png", Dexler_bin);
-    
+
     var Eislex_bin = FS.readFileSync("website/images/Eislex.png");
     uploadItemAsBinary("Eislex.png", "image/png", Eislex_bin);
 
@@ -178,7 +178,7 @@ function uploadItemAsBinary(key_name_str, content_type_str, bin){
 
     var Longlu_bin = FS.readFileSync("website/images/Longlu.png");
     uploadItemAsBinary("Longlu.png", "image/png", Longlu_bin);
-    
+
     var Lucian_bin = FS.readFileSync("website/images/Lucian.png");
     uploadItemAsBinary("Lucian.png", "image/png", Lucian_bin);
 
@@ -199,7 +199,7 @@ function uploadItemAsBinary(key_name_str, content_type_str, bin){
 
     var Omnitrek_bin = FS.readFileSync("website/images/Omnitrek.png");
     uploadItemAsBinary("Omnitrek.png", "image/png", Omnitrek_bin);
-    
+
     var Pradumo_bin = FS.readFileSync("website/images/Pradumo.png");
     uploadItemAsBinary("Pradumo.png", "image/png", Pradumo_bin);
 
@@ -229,7 +229,7 @@ function uploadItemAsBinary(key_name_str, content_type_str, bin){
 
     var Shulmi_bin = FS.readFileSync("website/images/Shulmi.png");
     uploadItemAsBinary("Shulmi.png", "image/png", Shulmi_bin);
-    
+
     var Smolder_bin = FS.readFileSync("website/images/Smolder.png");
     uploadItemAsBinary("Smolder.png", "image/png", Smolder_bin);
 
@@ -241,7 +241,7 @@ function uploadItemAsBinary(key_name_str, content_type_str, bin){
 
     var Sukola_bin = FS.readFileSync("website/images/Sukola.png");
     uploadItemAsBinary("Sukola.png", "image/png", Sukola_bin);
-    
+
     var Tagnaurak_bin = FS.readFileSync("website/images/Tagnaurak.png");
     uploadItemAsBinary("Tagnaurak.png", "image/png", Tagnaurak_bin);
 
@@ -260,8 +260,3 @@ function uploadItemAsBinary(key_name_str, content_type_str, bin){
     var Yuxo_bin = FS.readFileSync("website/images/Yuxo.png");
     uploadItemAsBinary("Yuxo.png", "image/png", Yuxo_bin);
 })();
-
-
-
-
-

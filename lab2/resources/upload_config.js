@@ -9,7 +9,7 @@
 
     You must replaace <FMI> with your bucket name
 
-    Keeo the quotes in there below, and literally just 
+    Keeo the quotes in there below, and literally just
     replace the characters <FMI>
 
 * Copyright 2010-2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -26,14 +26,14 @@
 * permissions and limitations under the License.
 
 */
-var 
+var
     AWS = require("aws-sdk"),
     S3API = new AWS.S3({
         apiVersion: "2006-03-01",
         region: "us-east-1"
     }),
     FS = require("fs"),
-    bucket_name_str = "<FMI>";
+    bucket_name_str = "dynamodb-project-dragon-website";
 
 
 function uploadItemAsBinary(key_name_str, content_type_str, bin){
@@ -51,10 +51,9 @@ function uploadItemAsBinary(key_name_str, content_type_str, bin){
 
 
 (function init(){
-    var 
-        file_path_str = "/home/ec2-user/environment/lab2/resources/website/",
+    var
+        file_path_str = "./website/",
         file_name_str = "config.js",
         config_bin = FS.readFileSync(file_path_str + file_name_str);
     uploadItemAsBinary(file_name_str, "text/javascript", config_bin);
 })();
-
