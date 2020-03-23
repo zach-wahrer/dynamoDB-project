@@ -18,15 +18,15 @@ var
     AWS = require("aws-sdk"),
     DDB = new AWS.DynamoDB({
         apiVersion: "2012-08-10",
-        region: "us-east-1"
+        region: "us-west-2"
     });
-function pushToDragonStatsTable(){
-    var 
+function pushToDragonStatsTableOne(){
+    var
         dragon = {},
         dragon_formatted_arr = [],
         params = {};
 
-    var DRAGON_DATA_ARR = require("../resources/dragon_stats.json");
+    var DRAGON_DATA_ARR = require("./resources/dragon_stats_one.json");
 
     for(var i_int = 0; i_int < DRAGON_DATA_ARR.length; i_int += 1){
         dragon = {
@@ -46,7 +46,7 @@ function pushToDragonStatsTable(){
                     },
                     location_city: {
                         "S": DRAGON_DATA_ARR[i_int].location_city_str
-                    }, 
+                    },
                     location_country: {
                         "S": DRAGON_DATA_ARR[i_int].location_country_str
                     },
@@ -66,18 +66,71 @@ function pushToDragonStatsTable(){
     }
     params = {
         RequestItems: {
-            "<FMI>": dragon_formatted_arr.reverse()
+            "dragon_stats": dragon_formatted_arr.reverse()
+        }
+    };
+    return DDB.batchWriteItem(params).promise();
+}
+function pushToDragonStatsTableTwo(){
+    var
+        dragon = {},
+        dragon_formatted_arr = [],
+        params = {};
+
+    var DRAGON_DATA_ARR = require("./resources/dragon_stats_two.json");
+
+    for(var i_int = 0; i_int < DRAGON_DATA_ARR.length; i_int += 1){
+        dragon = {
+            PutRequest: {
+                Item: {
+                    damage: {
+                        "N": DRAGON_DATA_ARR[i_int].damage_int.toString()
+                    },
+                    description: {
+                        "S": DRAGON_DATA_ARR[i_int].description_str
+                    },
+                    dragon_name: {
+                        "S": DRAGON_DATA_ARR[i_int].dragon_name_str
+                    },
+                    family: {
+                        "S": DRAGON_DATA_ARR[i_int].family_str
+                    },
+                    location_city: {
+                        "S": DRAGON_DATA_ARR[i_int].location_city_str
+                    },
+                    location_country: {
+                        "S": DRAGON_DATA_ARR[i_int].location_country_str
+                    },
+                    location_neighborhood: {
+                        "S": DRAGON_DATA_ARR[i_int].location_neighborhood_str
+                    },
+                    location_state: {
+                        "S": DRAGON_DATA_ARR[i_int].location_state_str
+                    },
+                    protection: {
+                        "N": DRAGON_DATA_ARR[i_int].protection_int.toString()
+                    },
+                }
+            }
+        };
+
+
+        dragon_formatted_arr.push(dragon);
+    }
+    params = {
+        RequestItems: {
+            "dragon_stats": dragon_formatted_arr.reverse()
         }
     };
     return DDB.batchWriteItem(params).promise();
 }
 function pushToDragonCurrentPowerTable(){
-    var 
+    var
         dragon = {},
         dragon_formatted_arr = [],
         params = {};
 
-    var DRAGON_DATA_ARR = require("../resources/dragon_current_power.json");
+    var DRAGON_DATA_ARR = require("./resources/dragon_current_power.json");
 
     for(var i_int = 0; i_int < DRAGON_DATA_ARR.length; i_int += 1){
         dragon = {
@@ -102,18 +155,18 @@ function pushToDragonCurrentPowerTable(){
     }
     params = {
         RequestItems: {
-            "DragonCurrentPowerTable": dragon_formatted_arr.reverse()
+            "dragon_current_power": dragon_formatted_arr.reverse()
         }
     };
-    return DDB.<FMI>(params).promise();
+    return DDB.batchWriteItem(params).promise();
 }
 function pushToDragonBonusAttackTable(){
-    var 
+    var
         dragon = {},
         dragon_formatted_arr = [],
         params = {};
 
-    var DRAGON_DATA_ARR = require("../resources/dragon_bonus_attack.json");
+    var DRAGON_DATA_ARR = require("./resources/dragon_bonus_attack.json");
 
     for(var i_int = 0; i_int < DRAGON_DATA_ARR.length; i_int += 1){
         dragon = {
@@ -138,18 +191,18 @@ function pushToDragonBonusAttackTable(){
     }
     params = {
         RequestItems: {
-            "<FMI>": dragon_formatted_arr.reverse()
+            "dragon_bonus_attack": dragon_formatted_arr.reverse()
         }
     };
     return DDB.batchWriteItem(params).promise();
 }
 function pushToDragonFamilyTable(){
-    var 
+    var
         dragon = {},
         dragon_formatted_arr = [],
         params = {};
 
-    var DRAGON_DATA_ARR = require("../resources/dragon_family.json");
+    var DRAGON_DATA_ARR = require("./resources/dragon_family.json");
 
 
     for(var i_int = 0; i_int < DRAGON_DATA_ARR.length; i_int += 1){
@@ -160,7 +213,7 @@ function pushToDragonFamilyTable(){
                         "S": DRAGON_DATA_ARR[i_int].breath_attack_str
                     },
                     damage_modifer: {
-                        "N": DRAGON_DATA_ARR[i_int].damage_modifer_int.toString()
+                        "N": DRAGON_DATA_ARR[i_int].damage_modifier_int.toString()
                     },
                     description: {
                         "S": DRAGON_DATA_ARR[i_int].description_str
@@ -169,7 +222,7 @@ function pushToDragonFamilyTable(){
                         "S": DRAGON_DATA_ARR[i_int].family_str
                     },
                     protection_moodifier_int: {
-                        "N": DRAGON_DATA_ARR[i_int].protection_moodifier_int.toString()
+                        "N": DRAGON_DATA_ARR[i_int].protection_modifier_int.toString()
                     }
                 }
             }
@@ -178,17 +231,18 @@ function pushToDragonFamilyTable(){
     }
     params = {
         RequestItems: {
-            "DragonFamilyTable": dragon_formatted_arr.reverse()
+            "dragon_family": dragon_formatted_arr.reverse()
         }
     };
-    return DDB.<FMI>(params).promise();
+    return DDB.batchWriteItem(params).promise();
 }
 
 (async function seed(){
     console.time("HowFastWasThat");
     //async 2x speed
     console.log(await Promise.all([
-            pushToDragonStatsTable(), 
+            pushToDragonStatsTableOne(),
+            pushToDragonStatsTableTwo(),
             pushToDragonCurrentPowerTable(),
             pushToDragonBonusAttackTable(),
             pushToDragonFamilyTable()
