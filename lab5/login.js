@@ -13,7 +13,7 @@
 * permissions and limitations under the License.
 */
 
-exports.handler = function(event, context, callback){ 
+exports.handler = function(event, context, callback){
     console.log("To run a Local test in Cloud 9 use `node login.js test 'email_address_str` 'attempted_password_str'");
     console.log("Running in Lambda");
     if(event["email_address_str"] && event["attempted_password_str"]){
@@ -22,39 +22,39 @@ exports.handler = function(event, context, callback){
          callback("no credentials passed", null);
     }
  };
- 
- var 
-     AWS = require("aws-sdk"),   
-     BCRYPT = require("bcrypt"),  
-     UUID4 = require("uuid/v4"),                     
+
+ var
+     AWS = require("aws-sdk"),
+     BCRYPT = require("bcrypt"),
+     UUID4 = require("uuid/v4"),
      DDB = new AWS.DynamoDB({
          apiVersion: "2012-08-10",
-         region: "<FMI>"
+         region: "us-west-2"
      }),
-     SESSION_TIMEOUT_IN_MINUTES_INT = 1;
- 
- async function <FMI>(user_name_str, new_session_id_str){
-     var 
+     SESSION_TIMEOUT_IN_MINUTES_INT = 20;
+
+ async function createSession(user_name_str, new_session_id_str){
+     var
          params = {
              Item: {
-                 "<FMI>": {
+                 "session_id": {
                      S: new_session_id_str
-                 }, 
+                 },
                  "user_name": {
                       S: user_name_str
-                 }, 
+                 },
                  "expiration_time": {
                      N: (Math.floor((new Date).getTime()/1000) + (60 * SESSION_TIMEOUT_IN_MINUTES_INT)).toString()
                  }
-             }, 
-             ReturnConsumedCapacity: "TOTAL", 
+             },
+             ReturnConsumedCapacity: "TOTAL",
              TableName: "sessions"
       };
-      return DDB.<FMI>(params).promise();
+      return DDB.putItem(params).promise();
  }
- 
+
  function logMeIn(email_address_str, attempted_password_str, cb){
-     var 
+     var
          params = {
              ExpressionAttributeValues: {
                  ":email_address": {
@@ -66,7 +66,7 @@ exports.handler = function(event, context, callback){
              IndexName: "email_index"
          };
       DDB.query(params, async function(err, data){
-          var 
+          var
              new_session_id_str = UUID4(),
              return_me = {};
           if(err){
@@ -89,11 +89,11 @@ exports.handler = function(event, context, callback){
           }else{
              cb("credentials invalid", null);
           }
- 
+
       });
  }
- 
- 
+
+
  if(process.argv[2] === "test"){
      if(process.argv[3] && process.argv[4]){
          console.log("Local test to log in a user with email of " + process.argv[3]);
@@ -102,4 +102,3 @@ exports.handler = function(event, context, callback){
          console.log("Pass in email address and password");
      }
  }
- 

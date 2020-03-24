@@ -18,12 +18,12 @@ var
     BCRYPT = require("bcrypt"),
     DDB = new AWS.DynamoDB({
         apiVersion: "2012-08-10",
-        region: "<FMI>"
+        region: "us-west-2"
     });
 
 
-function <FMI>(){
-    var 
+function pushToUsersTable(){
+    var
         user = {},
         user_formatted_arr = [],
         params = {},
@@ -56,17 +56,17 @@ function <FMI>(){
     }
     params = {
         RequestItems: {
-            "<FMI>": user_formatted_arr.reverse()
+            "users": user_formatted_arr.reverse()
         }
     };
-    return DDB.<FMI>(params).promise();
+    return DDB.batchWriteItem(params).promise();
 }
 
 (async function seed(){
     console.time("HowFastWasThat");
     //async 2x speed
     console.log(await Promise.all([
-        pushToUsersTable() 
+        pushToUsersTable()
      ]));
     console.timeEnd("HowFastWasThat");
 })();

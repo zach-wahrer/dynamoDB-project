@@ -13,23 +13,23 @@
 * permissions and limitations under the License.
 */
 
-var 
-    AWS = require("aws-sdk"),                       
+var
+    AWS = require("aws-sdk"),
     DDB = new AWS.DynamoDB({
         apiVersion: "2012-08-10",
-        region: "<FMI>"
-    });                                              
+        region: "us-west-2"
+    });
 
 (function enableTTL(){
-	var 
+	var
 		params = {
-			TableName: "<FMI>",
+			TableName: "sessions",
 			TimeToLiveSpecification: {
 				AttributeName: "expiration_time",
-				Enabled: <FMI>
+				Enabled: true
 			}
 		};
-	DDB.<FMI>(params, function(err, data){
+	DDB.updateTimeToLive(params, function(err, data){
 		console.log(err, data);
 	});
 })();

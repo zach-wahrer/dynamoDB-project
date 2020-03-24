@@ -13,37 +13,37 @@
 * permissions and limitations under the License.
 */
 
-var LAMBDA_ROLE_ARN_STR = "<FMI>";
+var LAMBDA_ROLE_ARN_STR = "arn:aws:iam::367260156772:role/login-for-dragons-role";
 
 
-var 
-    AWS = require("aws-sdk"), 
-    FS = require("fs"),                 
-    LAMBDA = new AWS.<FMI>({
+var
+    AWS = require("aws-sdk"),
+    FS = require("fs"),
+    LAMBDA = new AWS.Lambda({
         apiVersion: "2015-03-31",
-        region: "us-east-1"
-    });    
+        region: "us-west-2"
+    });
 
 function createLambdaFunction(zip_bin){
-    var 
+    var
         params = {
             Code: {
                 ZipFile: new Buffer(zip_bin)
-            }, 
-            Description: "Login functionality", 
-            FunctionName: "LoginEdXDragonGame", 
+            },
+            Description: "Login functionality",
+            FunctionName: "LoginEdXDragonGame",
             Handler: "login.handler",
-            MemorySize: 128, 
-            Publish: true, 
+            MemorySize: 128,
+            Publish: true,
             Role: LAMBDA_ROLE_ARN_STR,
-            Runtime: "nodejs8.10", 
+            Runtime: "nodejs12.x",
             Timeout: 30
         };
-     return LAMBDA.<FMI>(params).promise();
+     return LAMBDA.createFunction(params).promise();
 }
 (async function init(){
-     var 
-        file_path_str = "/home/ec2-user/environment/lab5/",
+     var
+        file_path_str = "/home/zachtheclimber/coding/dynamoDB-project/lab5/",
         file_name_str = "login.zip",
         zip_bin = FS.readFileSync(file_path_str + file_name_str);
     console.log(await createLambdaFunction(zip_bin));
